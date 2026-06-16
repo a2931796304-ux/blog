@@ -4,6 +4,7 @@ const mysql = require('mysql2/promise');
 require('dotenv').config();
 
 const dbName = process.env.DB_NAME || 'personal_blog';
+const useSsl = process.env.DB_SSL === 'true';
 
 const escapeIdentifier = (identifier) => `\`${String(identifier).replace(/`/g, '``')}\``;
 
@@ -18,6 +19,7 @@ const initDatabase = async () => {
     port: Number(process.env.DB_PORT) || 3306,
     user: process.env.DB_USER || 'root',
     password: process.env.DB_PASSWORD || '',
+    ssl: useSsl ? { rejectUnauthorized: true } : undefined,
   });
 
   try {
